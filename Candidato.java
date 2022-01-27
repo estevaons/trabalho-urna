@@ -12,6 +12,7 @@ public class Candidato {
     private LocalDate data_nasc;
     private String destino_voto;
     private int num_partido;
+    private int idade;
 
 
     public Candidato(int numero,int votos_nominais,String situacao,String nome, String nome_urna,String sexo,LocalDate data_nasc,String destino_voto,int num_partido){
@@ -24,6 +25,14 @@ public class Candidato {
         this.data_nasc = data_nasc;
         this.destino_voto = destino_voto;
         this.num_partido = num_partido;
+    }
+
+    public int getIdade(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate data_nasc = LocalDate.parse(this.data_nasc.format(formatter), formatter);
+        LocalDate hoje = LocalDate.now();
+        int idade = hoje.getYear() - data_nasc.getYear();
+        return idade;
     }
 
     public int getNumero() {
