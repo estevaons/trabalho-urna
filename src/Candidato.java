@@ -1,3 +1,4 @@
+package src;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -27,11 +28,10 @@ public class Candidato {
         this.num_partido = num_partido;
     }
 
-    public int getIdade(){
+    public int getIdade(LocalDate dataEleicao){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate data_nasc = LocalDate.parse(this.data_nasc.format(formatter), formatter);
-        LocalDate hoje = LocalDate.now();
-        int idade = hoje.getYear() - data_nasc.getYear();
+        int idade = dataEleicao.getYear() - data_nasc.getYear();
         return idade;
     }
 

@@ -1,3 +1,4 @@
+package src;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,9 @@ import java.util.HashMap;
 
 public class Main{
     public static void main(String[] args){
+
+        //criar data 15/11/2020
+        LocalDate data = LocalDate.of(2020, 11, 15);
         List<String> candidatosLinhas = new ArrayList<String>();
 
         try{
@@ -230,7 +234,7 @@ public class Main{
         for(Partidos partido : partidos){
             partido.candidatosDoPartido.sort((Candidato c1, Candidato c2) -> {
                 if(c1.getVotos_nominais() == c2.getVotos_nominais()){
-                    return c1.getIdade() - c2.getIdade();
+                    return c1.getIdade(data) - c2.getIdade(data);
                 }                
                 return c2.getVotos_nominais() - c1.getVotos_nominais();
 
@@ -258,8 +262,92 @@ public class Main{
             cont++;
         }
 
+        //9. Distribuição de eleitos por faixa etária, considerando a idade do candidato no dia da eleição;
 
+        //percorrer lista de candidatos eleitos
+        
+        int menorQue30 = 0;
+        int entre30e40 = 0;
+        int entre40e50 = 0;
+        int entre50e60 = 0;
+        int maiorQue60 = 0;
+        
+        for(Candidato candidato : candidatosEleitos){
+            if(candidato.getIdade(data) < 30){
+                menorQue30++;
+            }
+            if(candidato.getIdade(data) >=30 && candidato.getIdade(data) < 40){
+                entre30e40++;
+            }
+            if(candidato.getIdade(data) >=40 && candidato.getIdade(data) < 50){
+                entre40e50++;
+            }
+            if(candidato.getIdade(data) >=50 && candidato.getIdade(data) < 60){
+                entre50e60++;
+            }
+            if(candidato.getIdade(data) >=60){
+                maiorQue60++;
+            }
+        }
 
+        float porcentagemMenorQue30 = (float)menorQue30 / candidatosEleitos.size() * 100;
+        float porcentagemEntre30e40 = (float)entre30e40 / candidatosEleitos.size() * 100;
+        float porcentagemEntre40e50 = (float)entre40e50 / candidatosEleitos.size() * 100;
+        float porcentagemEntre50e60 = (float)entre50e60 / candidatosEleitos.size() * 100;
+        float porcentagemMaiorQue60 = (float)maiorQue60 / candidatosEleitos.size() * 100;
+        
+        System.out.printf("\nEleitos, por faixa etária (na data da eleiçaõ):\n");
+        System.out.printf("Idade < 30 : %d (%.2f%%)\n",menorQue30,porcentagemMenorQue30);
+        System.out.printf("30 <= Idade < 40 : %d (%.2f%%)\n",entre30e40,porcentagemEntre30e40);
+        System.out.printf("40 <= Idade < 50 : %d (%.2f%%)\n",entre40e50,porcentagemEntre40e50);
+        System.out.printf("50 <= Idade < 60 : %d (%.2f%%)\n",entre50e60,porcentagemEntre50e60);
+        System.out.printf("Idade <= 60 : %d (%.2f%%)\n\n",maiorQue60,porcentagemMaiorQue60);
+
+        //10. Distribuição de eleitos por sexo;
+        int homens = 0;
+        int mulheres = 0;
+
+        for(Candidato candidato : candidatosEleitos){
+            if(candidato.getSexo().equals("M")){
+                homens++;
+            }
+            if(candidato.getSexo().equals("F")){
+                mulheres++;
+            }
+        }
+
+        //imprimir resultados
+        float porcentagemHomens = (float)homens / candidatosEleitos.size() * 100;
+        float porcentagemMulheres = (float)mulheres / candidatosEleitos.size() * 100;
+
+        System.out.printf("Eleitos, por sexo:\n");
+        System.out.printf("Feminino: %d (%.2f%%)\n",mulheres,porcentagemMulheres);
+        System.out.printf("Masculino: %d (%.2f%%)\n\n",homens,porcentagemHomens);
+
+        // 11. total de votos válidos
+        int totalVotosValidos = 0;
+        int totaldeVotosNominais = 0;
+        int totaldeVotosLegenda = 0;
+
+        for(Candidato candidato : candidatos){
+            if(candidato.getDestino_voto().equals("Válido")){
+                totaldeVotosNominais += candidato.getVotos_nominais();
+            }
+        }
+        for(Partidos partido : partidos){
+            totaldeVotosLegenda += partido.getVotosLegenda();
+        }
+
+        totalVotosValidos = totaldeVotosNominais + totaldeVotosLegenda;
+
+        //calcular porcentagem
+
+        float porcetagemNominais = (float)totaldeVotosNominais / totalVotosValidos * 100;
+        float porcetagemLegenda = (float)totaldeVotosLegenda / totalVotosValidos * 100;
+
+        System.out.printf("Total de votos válidos: %d\n",totalVotosValidos);
+        System.out.printf("Total de votos nominais: %d (%.2f%%)\n",totaldeVotosNominais,porcetagemNominais);
+        System.out.printf("Total de votos legenda: %d (%.2f%%)\n",totaldeVotosLegenda,porcetagemLegenda);
     }
 }
 
