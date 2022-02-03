@@ -11,11 +11,12 @@ public class Main{
     public static void main(String[] args){
 
         //criar data 15/11/2020
-        LocalDate data = LocalDate.of(2020, 11, 15);
+        LocalDate data = LocalDate.parse(args[2], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
         List<String> candidatosLinhas = new ArrayList<String>();
 
         try{
-            candidatosLinhas = new LeituraCSV("candidatos.csv").lerArquivo();
+            candidatosLinhas = new LeituraCSV(args[0]).lerArquivo();
 
         }catch(Exception e){
             System.out.println("Erro: " + e.getMessage());
@@ -48,7 +49,7 @@ public class Main{
         List<String> partidosLinhas = new ArrayList<String>();
 
         try{
-            partidosLinhas = new LeituraCSV("partidos.csv").lerArquivo();
+            partidosLinhas = new LeituraCSV(args[1]).lerArquivo();
 
         }catch(Exception e){
             System.out.println("Erro: " + e.getMessage());
