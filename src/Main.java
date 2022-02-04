@@ -104,12 +104,14 @@ public class Main{
             };
             return c2.getVotos_nominais() - c1.getVotos_nominais();
         });
-        //candidatosEleitos.sort((Candidato c1, Candidato c2) -> c2.getVotos_nominais() - c1.getVotos_nominais());
+        
 
         //imprimir candidatos eleitos ordenados
         System.out.println("\nVereadores eleitos:");
+        int cont = 1;
         for(Candidato candidato : candidatosEleitos){
-            System.out.printf("%s / %s (%s, %d votos)\n",candidato.getNome(),candidato.getNome_urna(),mapaPartidos.get(candidato.getNum_partido()).getSigla(),candidato.getVotos_nominais());
+            System.out.printf("%d - %s / %s (%s, %d votos)\n",cont,candidato.getNome(),candidato.getNome_urna(),mapaPartidos.get(candidato.getNum_partido()).getSigla(),candidato.getVotos_nominais());
+            cont++;
         }
 
         // 3.imprimir candidatos mais votados dentro do numero de vagas
@@ -121,14 +123,21 @@ public class Main{
             };
             return c2.getVotos_nominais() - c1.getVotos_nominais();
         });
+
+        // setando o rank de cada candidato de acordo com seu numero de votos
+        int cont1 = 1;
+        for(Candidato candidato : candidatos){
+            candidato.setRank(cont1);
+            cont1++;
+        }
         
 
         System.out.println("\nCandidatos mais votados (em ordem decrescente de votação e respeitando número de vagas):");
-        int cont = 0;
+        cont = 0;
         for(Candidato candidato : candidatos){
             if(cont < numeroEleitos){
                 cont++;
-                System.out.printf("%s / %s (%s, %d votos)\n",candidato.getNome(),candidato.getNome_urna(),mapaPartidos.get(candidato.getNum_partido()).getSigla(),candidato.getVotos_nominais());
+                System.out.printf("%d - %s / %s (%s, %d votos)\n",cont,candidato.getNome(),candidato.getNome_urna(),mapaPartidos.get(candidato.getNum_partido()).getSigla(),candidato.getVotos_nominais());
             }
         }
 
@@ -140,8 +149,8 @@ public class Main{
         for(Candidato candidato : candidatos){
             if(cont2 < numeroEleitos){
                 cont2++;
-                if(candidato.getSituacao().equals("Não eleito") || candidato.getSituacao().equals("Suplente")){
-                    System.out.printf("%s / %s (%s, %d votos)\n",candidato.getNome(),candidato.getNome_urna(),mapaPartidos.get(candidato.getNum_partido()).getSigla(),candidato.getVotos_nominais());
+                if(candidato.getSituacao().equals("Não eleito") || candidato.getSituacao().equals("Suplente")){                 
+                    System.out.printf("%d - %s / %s (%s, %d votos)\n",candidato.getRank(),candidato.getNome(),candidato.getNome_urna(),mapaPartidos.get(candidato.getNum_partido()).getSigla(),candidato.getVotos_nominais());
                 }
 
             }
@@ -157,10 +166,11 @@ public class Main{
 
         System.out.print("\nEleitos, que se beneficiaram do sistema proporcional:\n");
 
+        
+
         for(Candidato candidatoEle : candidatosEleitos){
-            if(candidatoEle.getVotos_nominais() < menorVotos){
-                
-                System.out.printf("%s / %s (%s, %d votos)\n",candidatoEle.getNome(),candidatoEle.getNome_urna(),mapaPartidos.get(candidatoEle.getNum_partido()).getSigla(),candidatoEle.getVotos_nominais());
+            if(candidatoEle.getVotos_nominais() < menorVotos){             
+                System.out.printf("%d - %s / %s (%s, %d votos)\n",candidatoEle.getRank(),candidatoEle.getNome(),candidatoEle.getNome_urna(),mapaPartidos.get(candidatoEle.getNum_partido()).getSigla(),candidatoEle.getVotos_nominais());
             }
         }
 
@@ -177,8 +187,7 @@ public class Main{
             }
             partido.setVotosNominais_partido(votosPartido);       
             partido.setVotosTotais(partido.getVotosNominais_partido() + partido.getVotosLegenda());
-
-            // System.out.printf("%s - %d: %d votos (%d nominais e %d de legenda), %d candidatos eleitos\n",partido.getSigla(),partido.getNum_partido(),partido.getVotosTotais(),partido.getVotosNominais_partido(),partido.getVotos_legenda(),partido.candidatosDoPartido.size());          
+       
         }
 
         //ordernar partidos por votos
@@ -192,8 +201,10 @@ public class Main{
         //imprimir partidos ordenados
         System.out.println("\nVotação dos partidos e número de candidatos eleitos:\n");
 
+        cont = 0;
         for(Partidos partido : partidos){
-            System.out.printf("%s - %d: %d votos (%d nominais e %d de legenda), %d candidatos eleitos\n",partido.getSigla(),partido.getNum_partido(),partido.getVotosTotais(),partido.getVotosNominais_partido(),partido.getVotos_legenda(),partido.candidatosDoPartido.size());
+            cont++;
+            System.out.printf("%d - %s - %d: %d votos (%d nominais e %d de legenda), %d candidatos eleitos\n",cont,partido.getSigla(),partido.getNum_partido(),partido.getVotosTotais(),partido.getVotosNominais_partido(),partido.getVotos_legenda(),partido.candidatosDoPartido.size());
         }
       
 
@@ -214,15 +225,18 @@ public class Main{
         
         System.out.print("\nVotação dos partidos (apenas votos de legenda):\n");
 
+        cont = 0;
+
         for(Partidos partido : partidos){
             float porcentagem = (float)partido.getVotos_legenda() / partido.getVotosTotais() * 100;
 
             if(porcentagem == 0){
-                System.out.printf("%s - %d, %d votos de legenda (proporção não calculada, 0 voto no partido)\n",partido.getSigla(),partido.getNum_partido(),partido.getVotos_legenda());
+                cont++;
+                System.out.printf("%d - %s - %d, %d votos de legenda (proporção não calculada, 0 voto no partido)\n",cont,partido.getSigla(),partido.getNum_partido(),partido.getVotos_legenda());               
                 continue;
             }
-            
-            System.out.printf("%s - %d, %d votos de legenda (%.2f%% do total do partido)\n",partido.getSigla(),partido.getNum_partido(),partido.getVotos_legenda(),porcentagem);
+            cont++;
+            System.out.printf("%d - %s - %d, %d votos de legenda (%.2f%% do total do partido)\n",cont,partido.getSigla(),partido.getNum_partido(),partido.getVotos_legenda(),porcentagem);
         }
 
         //      8.8. Primeiro e último colocados de cada partido (com nome da urna, número do candidato e total de votos

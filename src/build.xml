@@ -1,7 +1,7 @@
 <project name="TrabalhoPROG3_2021_2" default="compile" basedir=".">
 <description>Arquivo de build do trabalho de PROG3, 2020/2.</description>
 <!-- Propriedades do build. -->
-<property name="src" location="" />
+<property name="src" location="." />
 <property name="bin" location="bin" />
 <property name="mainClass" value="src.Main" />
 <!-- Inicialização. -->
