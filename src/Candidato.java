@@ -1,6 +1,7 @@
-package src;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.Period;
 
 
 public class Candidato {
@@ -18,6 +19,13 @@ public class Candidato {
 
 
     public Candidato(int numero,int votos_nominais,String situacao,String nome, String nome_urna,String sexo,LocalDate data_nasc,String destino_voto,int num_partido){
+        
+        //verifica se o nome_urna termina com ' '
+        if(nome_urna.charAt(nome_urna.length()-1)==' '){
+            nome_urna = nome_urna.substring(0,nome_urna.length()-1);
+        }
+
+
         this.numero = numero;
         this.votos_nominais = votos_nominais;
         this.situacao = situacao;
@@ -32,8 +40,9 @@ public class Candidato {
     public int getIdade(LocalDate dataEleicao){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate data_nasc = LocalDate.parse(this.data_nasc.format(formatter), formatter);
-        int idade = dataEleicao.getYear() - data_nasc.getYear();
-        return idade;
+        Period periodo = Period.between(data_nasc, dataEleicao);
+
+        return periodo.getYears();
     }
 
     public int getRank(){
@@ -49,7 +58,12 @@ public class Candidato {
     }
 
     public int getVotos_nominais() {
-        return votos_nominais;
+        if(this.destino_voto.equals("Válido")){
+            return votos_nominais;
+        }else{
+            return 0;
+        }
+        
     }
 
     public String getSituacao() {

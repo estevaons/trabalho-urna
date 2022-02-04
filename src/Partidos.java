@@ -1,4 +1,4 @@
-package src;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -18,6 +18,16 @@ public class Partidos {
         this.sigla = sigla;
         this.votosNominais_partido = 0;
         this.votosTotais = 0;
+    }
+
+    public int getQtdEleitos(){
+        int qtdEleitos = 0;
+        for(Candidato candidato : candidatosDoPartido){
+            if(candidato.getSituacao().equals("Eleito")){
+                qtdEleitos++;
+            }
+        }
+        return qtdEleitos;
     }
 
     public int getVotosLegenda() {
