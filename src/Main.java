@@ -297,7 +297,7 @@ public class Main{
 
             });
         }
-        //ordenando os partidos COM PROBLEMA !!!!!
+        //ordenando os partidos
         partidos.sort((Partidos p1,Partidos p2) -> {
             if(p1.candidatosDoPartido.size() == 0 || p2.candidatosDoPartido.size() == 0){
                 return 0;
